@@ -1,4 +1,5 @@
-#
+# SPDX-License-Identifier: GPL-3.0
+# Copyright (C) 2023-present Guoxin "7Ji" Pu (https://github.com/7Ji)
 
 import pathlib
 
