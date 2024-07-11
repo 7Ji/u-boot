@@ -1,0 +1,24 @@
+From c7ad7167c95e3425a61e309191bff7fba69ff839 Mon Sep 17 00:00:00 2001
+From: Guoxin Pu <pugokushin@gmail.com>
+Date: Thu, 11 Jul 2024 10:19:56 +0800
+Subject: [PATCH] fip: gi_fip_extract_bl3x: fix non-zero return code on success
+
+---
+ fip.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/fip.c b/fip.c
+index 1d2dee6..6a3866e 100644
+--- a/fip.c
++++ b/fip.c
+@@ -1458,6 +1458,7 @@ static int gi_fip_extract_bl3x(struct fip_toc_info const *toc, int fdin,
+ 			ret = -EINVAL;
+ 			goto out;
+ 		}
++		ret = 0;
+ 
+ 		binfd = open(path, O_WRONLY | O_CREAT, FOUT_MODE_DFT);
+ 		if(binfd < 0) {
+-- 
+2.45.2
+
