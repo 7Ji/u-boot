@@ -18,12 +18,11 @@ This FIP image would be `unpacked/bootloader.PARTITION`
 
 If your box is running Android, you can extract FIP from the eMMC user hwpartition, by dumping the first 4M from the corresponding block device
 ```
-adb shell dd if=/dev/mmcblkN of=/sdcard/fip bs=1M count=4
+adb shell dd if=/dev/mmcblkN of=/sdcard/fip bs=512 skip=1 count=8191
 adb pull /sdcard/fip fip
 ```
 
 Be sure you dumped from the right block device (the one with boot0 and boot1 companions). For generic Linux scenarios dd directly without adb pulling.
-
 
 
 ### From eMMC (special case: FIP on boot hwpartition)
