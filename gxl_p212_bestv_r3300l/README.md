@@ -79,15 +79,17 @@ The FIP image `new-fip` shall be stored at either one of the following places:
 
 with 512 offset (reserved for MBR), thus it would conflict with GPT but not MBR. Be sure you only create MBR partition table if you do write it to eMMC user partition.
 
+**Special note: If you're using amlogic-boot-fip and got `u-boot.bin.sd.bin`, then you do not need the initial 512 offset, as the image already contains that**
+
 E.g. to write to eMMC user hwpartition:
 ```
-sudo dd if=u-boot.bin.sd.bin of=/dev/mmcblkN bs=512 seek=1
+sudo dd if=new-fip.img of=/dev/mmcblkN bs=512 seek=1
 ```
 
 E.g. to write to eMMC boot hwpartition 1:
 ```
 echo 0 | sudo tee /sys/block/mmcblkNboot0/force_ro 
-sudo dd if=u-boot.bin.sd.bin of=/dev/mmcblkNboot0 bs=512 seek=1
+sudo dd if=new-fip.img of=/dev/mmcblkNboot0 bs=512 seek=1
 ```
 
 The lookup order for FIP is user hw partition -> boot hwpartition 1 -> boot hw partition 2, be sure to erase the earlier targets if your target is later.
