@@ -27,7 +27,7 @@ Be sure you dumped from the right block device (the one with boot0 and boot1 com
 
 #### Special case: FIP on boot hwpartition
 
-For SoCs since GXL family, it's possible to store FIP on eMMC boot hwpartition (those listed as mmcblkNboot0 and mmcblkNboot1) rather than the user hwpartition. However this is never used by any stock Amlogic Android image or third party Linux images. If this is the case (like on my tinkered box), dump from the corresponding `boot0` or `boot1` block device instead, **without 512 offset**.
+For SoCs since GXL family, it's possible to store FIP on eMMC boot hwpartition (those listed as mmcblkNboot0 and mmcblkNboot1) rather than the user hwpartition. However this is never used by any stock Amlogic Android image or third party Linux images. If this is the case (like on my tinkered box), dump from the corresponding `boot0` or `boot1` block device instead.
 
 ## FIP Decryption
 
@@ -73,11 +73,11 @@ gxlimg --type fip --bl2 bl2.sign --bl30 bl30.enc --bl301 bl301.enc --bl31 bl31.e
 ## FIP writing
 
 The FIP image `new-fip` shall be stored at either one of the following places:
-- eMMC user hwpartition (`mmcblkN`) with 512 offset (reserved for MBR)
+- eMMC user hwpartition (`mmcblkN`)
 - eMMC boot hwpartition 1 (`mmcblkNboot0`)
 - eMMC boot hwpartition 2 (`mmcblkNboot1`)
 
-Thus when written on boot hwpartition it would conflict with neither GPR nor MBR; when written on user hwpartition it would conflict with GPT but not MBR. Be sure you only create MBR partition table if you do write it to eMMC user partition.
+with 512 offset (reserved for MBR), thus it would conflict with GPT but not MBR. Be sure you only create MBR partition table if you do write it to eMMC user partition.
 
 E.g. to write to eMMC user hwpartition:
 ```
@@ -87,7 +87,7 @@ sudo dd if=u-boot.bin.sd.bin of=/dev/mmcblkN bs=512 seek=1
 E.g. to write to eMMC boot hwpartition 1:
 ```
 echo 0 | sudo tee /sys/block/mmcblkNboot0/force_ro 
-sudo dd if=u-boot.bin.sd.bin of=/dev/mmcblkNboot0
+sudo dd if=u-boot.bin.sd.bin of=/dev/mmcblkNboot0 bs=512 seek=1
 ```
 
 The lookup order for FIP is user hw partition -> boot hwpartition 1 -> boot hw partition 2, be sure to erase the earlier targets if your target is later.
